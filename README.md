@@ -27,10 +27,9 @@ docker build \
     --build-arg VERSION=v0.9.1 \
     -t nolim1t/clightning:v0.9.1 .
 ```
-
 ## Todo
 
-- [ ] Document how to build this project for more advanced users
+- [x] Document how to build this project for more advanced users
 - [ ] Document how to use this container (config files, etc)
 - [ ] Build a docker compose file as an example
 - [ ] Build a gitlab action. Gitlab will be the main focus for this project
