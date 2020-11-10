@@ -61,6 +61,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends socat inotify-t
     && rm -rf /var/lib/apt/lists/*
 
 
+COPY --from=builder /lib /lib
 COPY --from=builder /tmp/lightning_install/ /usr/local/
 COPY --from=downloader /opt/bin /usr/bin
 COPY --from=builder /opt/lightning/tools/docker-entrypoint.sh entrypoint.sh
