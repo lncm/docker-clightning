@@ -1,5 +1,7 @@
 # C-Lightning in a Docker container
 
+[![pipeline status](https://gitlab.com/nolim1t/docker-clightning/badges/master/pipeline.svg)](https://gitlab.com/nolim1t/docker-clightning/-/commits/master)
+
 ## What
 
 C-Lightning by Elements project in a [docker container](https://gitlab.com/nolim1t/docker-clightning)
@@ -32,5 +34,5 @@ docker build \
 - [x] Document how to build this project for more advanced users
 - [ ] Document how to use this container (config files, etc)
 - [ ] Build a docker compose file as an example
-- [ ] Build a gitlab action. Gitlab will be the main focus for this project
+- [x] Build a gitlab action. Gitlab will be the main focus for this project
 - [ ] Build a github action. Github will be the secondary focus for this.
