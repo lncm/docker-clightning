@@ -15,7 +15,7 @@ RUN set -ex \
 WORKDIR /opt
 
 # Fetch and verify bitcoin (As per arch)
-COPY ./fetch-bitcoin.sh .
+COPY ./fetch-scripts/fetch-bitcoin.sh .
 RUN chmod 755 fetch-bitcoin.sh
 RUN ./fetch-bitcoin.sh
 
