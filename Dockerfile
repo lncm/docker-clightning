@@ -3,7 +3,7 @@ ARG VERSION=v0.9.1
 ARG USER=lightning
 ARG DATA=/data
 
-FROM debian:stretch-slim as downloader
+FROM debian:buster-slim as downloader
 
 ARG REPO
 ARG VERSION
@@ -53,9 +53,11 @@ RUN git checkout $VERSION
 ARG DEVELOPER=0
 RUN ./configure --prefix=/tmp/lightning_install --enable-static && make -j3 DEVELOPER=${DEVELOPER} && make install
 
-FROM debian:stretch-slim as final
+FROM debian:buster-slim as final
 ARG USER
 ARG DATA
+
+LABEL maintainer="nolim1t (hello@nolim1t.co)"
 
 RUN apt-get update && apt-get install -y --no-install-recommends socat inotify-tools python3 python3-pip \
     && rm -rf /var/lib/apt/lists/*
@@ -66,21 +68,10 @@ COPY --from=builder /tmp/lightning_install/ /usr/local/
 COPY --from=downloader /opt/bin /usr/bin
 COPY --from=builder /opt/lightning/tools/docker-entrypoint.sh entrypoint.sh
 
-# Debug
-RUN ls -la /usr/sbin/adduser
-
-RUN adduser --version
-
-RUN echo "Username"
-
-RUN echo $USER
-
-RUN echo "Home directory"
-
-RUN echo $DATA
-
-# Do actual stuff
-RUN /usr/sbin/adduser --disabled-password --home "$DATA" --gecos "" "$USER"
+RUN adduser --disabled-password \
+    --home "$DATA" \
+    --gecos "" \
+    "$USER"
 
 USER $USER 
 
