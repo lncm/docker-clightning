@@ -66,7 +66,22 @@ COPY --from=builder /tmp/lightning_install/ /usr/local/
 COPY --from=downloader /opt/bin /usr/bin
 COPY --from=builder /opt/lightning/tools/docker-entrypoint.sh entrypoint.sh
 
+# Debug
+RUN ls -la /usr/sbin/adduser
+
+RUN adduser --version
+
+RUN echo "Username"
+
+RUN echo $USER
+
+RUN echo "Home directory"
+
+RUN echo $DATA
+
+# Do actual stuff
 RUN /usr/sbin/adduser --disabled-password --home "$DATA" --gecos "" "$USER"
+
 USER $USER 
 
 ENV LIGHTNINGD_DATA=$DATA/.lightning
