@@ -1,0 +1,53 @@
+# c-lightning config Default (master doc https://github.com/ElementsProject/lightning/blob/master/doc/lightningd-config.5)
+
+# Uncomment if staying offline (good for maintenance)
+#offline
+# Uncomment in daemon mode (in docker probably don't have to?)
+#daemon
+
+alias=My CLightning Instance
+rgb=ffffff
+fee-per-satoshi=10
+min-capacity-sat=10000
+large-channels=1
+
+autocleaninvoice-cycle=86400
+autocleaninvoice-expired-by=7200
+
+bind-addr=0.0.0.0
+
+# For additional advertising addresses (tor / ipv5 / ipv4 / etc)
+#announce-addr=
+
+# For tor
+#proxy=127.0.0.1:9050
+# If we want to always use tor to connect to peers
+#always-use-proxy=true
+
+# Autotor mode
+#enable-autotor-v2-mode
+# For tor service control
+#addr=autotor:TORIPADDRESS[:SERVICEPORT]
+# For service password
+#tor-service-password=lncmrocks
+
+#Defining the network
+network=bitcoin
+mainnet
+bitcoin-cli=/usr/bin/bitcoin-cli
+# Default data directory (should be mapped to there with docker)
+bitcoin-datadir=/data/.bitcoin
+bitcoin-rpcuser=lncm
+bitcoin-rpcpassword=lncmrocks
+# Defines the host and port to connect to
+bitcoin-rpcconnect=localhost
+bitcoin-rpcport=8332
+bitcoin-retry-timeout=120
+#Triggers a rescan (should not need to)
+#rescan=144
+
+# Defines rpcfile for lightning-cli (best to leave it as default), and filemode (default 0600)
+#rpc-file=
+#rpc-file-mode=
+
+
