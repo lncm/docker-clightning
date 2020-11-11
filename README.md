@@ -3,8 +3,8 @@
 [![pipeline status](https://gitlab.com/nolim1t/docker-clightning/badges/master/pipeline.svg)](https://gitlab.com/lncm/docker-clightning/-/commits/master)
 [![Build on tag](https://github.com/lncm/docker-clightning/workflows/Docker%20build%20on%20tag/badge.svg)](https://github.com/lncm/docker-clightning/actions?query=workflow%3A%22Docker+build+on+tag%22)
 [![Build on push](https://github.com/lncm/docker-clightning/workflows/Docker%20build%20on%20push/badge.svg)](https://github.com/lncm/docker-clightning/actions?query=workflow%3A%22Docker+build+on+push%22)
-![Version](https://img.shields.io/github/v/release/lncm/docker-clightning?sort=semver) 
-[![Docker Pulls Count](https://img.shields.io/docker/pulls/lncm/docker-clightning.svg?style=flat)](https://hub.docker.com/r/lncm/docker-clightning)
+![Version](https://img.shields.io/github/v/release/lncm/clightning?sort=semver) 
+[![Docker Pulls Count](https://img.shields.io/docker/pulls/lncm/clightning.svg?style=flat)](https://hub.docker.com/r/lncm/clightning)
 
 ## What
 
