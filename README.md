@@ -14,6 +14,13 @@
 
 To do cross-platform builds the [LNCM](https://github.com/lncm/) way, like some of my other containers
 
+## Mirrors
+
+Where this code is maintained and mirrored (master branch).
+
+* [Gitlab](https://gitlab.com/nolim1t/docker-clightning)
+* [Github](https://github.com/lncm/docker-clightning)
+
 ## Building
 
 ### By Default
