@@ -9,7 +9,7 @@ alias=My CLightning Instance
 rgb=ffffff
 fee-per-satoshi=10
 min-capacity-sat=10000
-large-channels=1
+large-channels
 
 autocleaninvoice-cycle=86400
 autocleaninvoice-expired-by=7200
