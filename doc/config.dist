@@ -24,7 +24,7 @@ bind-addr=0.0.0.0
 # If we want to always use tor to connect to peers
 #always-use-proxy=true
 
-# Autotor mode
+# Autotor mode (V2. if you comment this out, c-lightning will use v3) instead
 #enable-autotor-v2-mode
 # For tor service control
 #addr=autotor:TORIPADDRESS[:SERVICEPORT]
