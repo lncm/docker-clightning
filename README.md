@@ -43,8 +43,8 @@ The other configurables you can use are:
 ## Todo
 
 - [x] Document how to build this project for more advanced users
-- [ ] Document how to use this container (config files, etc)
-- [ ] Build a docker compose file as an example
+- [x] Document how to use this container (config files, etc)
+- [x] Build a docker compose file as an example
 - [x] Build a gitlab action. Gitlab will be the main focus for this project
 - [x] Build a github action. Github will be the secondary focus for this.
 - [ ] Get the other shitcoin stuff working (Litecoin)
