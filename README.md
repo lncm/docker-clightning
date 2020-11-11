@@ -32,13 +32,32 @@ For example specifying a version to build.
 ```bash
 docker build \
     --build-arg VERSION=v0.9.1 \
-    -t nolim1t/clightning:v0.9.1 .
+    -t lncm/clightning:v0.9.1 .
 ```
 The other configurables you can use are:
 
 - `REPO` defines the master repo for lightning (eventually would like to make this fetch from TOR so the whole thing is anonymous)
 - `USER` defines the user name (Its cosmetic at this stage)
 - `DATA` defines the data folder for lightning user within the container
+
+## Running
+
+For convenience, we have a sample [docker-compose](https://gitlab.com/nolim1t/docker-clightning/-/raw/master/docker-compose.yml-dist) file and a [sample config file](https://gitlab.com/nolim1t/docker-clightning/-/raw/master/doc/config.dist)
+you may use (this is based off the [documentation](https://github.com/ElementsProject/lightning/blob/master/doc/lightningd-config.5.md) on the upstream).
+
+Or running straight from docker after building it:
+
+```bash
+# Assuming you have built it (This uses the similar parameters as the above docker-compose)
+docker run -it --rm \
+    --name clightning \
+    -e LIGHTNINGD_NETWORK=bitcoin \
+    -e LIGHTNINGD_RPC_PORT=10420 \
+    -v $HOME/.lightning:/data/.lightning \
+    -v $HOME/.bitcoin:/data/.bitcoin \
+    lncm/clightning:v0.9.1
+```
+
 
 ## Todo
 
