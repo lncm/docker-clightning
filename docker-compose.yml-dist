@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+    clightning:
+        image: lncm/clightning:v0.9.1
+        container_name: clightning
+        network_mode: host
+        restart: on-failure
+        environment:
+            LIGHTNINGD_NETWORK: bitcoin
+            LIGHTNINGD_RPC_PORT: 10420
+        volumes:
+            - "${HOME}/.lightning:/data/.lightning"
+            - "${HOME}/.bitcoin:/data/.bitcoin"
