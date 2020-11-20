@@ -1,4 +1,5 @@
-# c-lightning config Default (master doc https://github.com/ElementsProject/lightning/blob/master/doc/lightningd-config.5)
+# c-lightning config Default 
+# docs https://github.com/ElementsProject/lightning/blob/master/doc/lightningd-config.5.md
 
 # Uncomment if staying offline (good for maintenance)
 #offline
@@ -15,6 +16,17 @@ autocleaninvoice-cycle=86400
 autocleaninvoice-expired-by=7200
 
 bind-addr=0.0.0.0
+
+# Default plugindir
+plugin-dir=/data/.lightning/plugins
+
+# http plugin
+#plugin=/rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin
+# http plugin configurables
+# https://github.com/Start9Labs/c-lightning-http-plugin/blob/master/src/rpc.rs
+http-user=lncm
+http-pass=lncmrocks
+http-bind=0.0.0.0:1312
 
 # For additional advertising addresses (tor / ipv5 / ipv4 / etc)
 #announce-addr=

@@ -10,6 +10,8 @@
 
 [C-Lightning](https://github.com/ElementsProject/lightning) by [Elements Project](https://github.com/ElementsProject/) in a [docker container](https://gitlab.com/nolim1t/docker-clightning) for easy orchestration on embedded devices (like the Raspberry Pi), and auto-building.
 
+Also to enable [FullyNoded](https://github.com/Fonta1n3/FullyNoded/) (currently, and maybe other stuff in future) to work properly, I've also bundled in the [http rpc plugin](https://github.com/Start9Labs/c-lightning-http-plugin) by [Start9Labs](https://github.com/Start9Labs).
+
 ## Why?
 
 To do cross-platform builds the [LNCM](https://github.com/lncm/) way, like some of my other containers
@@ -65,12 +67,32 @@ docker run -it --rm \
     lncm/clightning:v0.9.1
 ```
 
+## Using the RPC Interface
+
+You will need to add the following to your config file:
+
+* `http-user`
+* `http-pass`
+* `http-bind` (hostname and port)
+
+Then you can pass whatever RPC commands to your C Lightning node!
+
+Example:
+
+```bash
+curl "http://lightning:lightningpass@localhost:1312" \
+    -d '{"id": "rpctest", "method": "getinfo", "params": []}'
+```
+
+Please keep in mind the RPC is probably not fully hardened for public internet access. You may want to put this behind a https proxy or TOR node!
 
 ## Todo
+
+Most stuff is in the [issues list](https://gitlab.com/nolim1t/docker-clightning/-/issues) however the below is kept for legacy purposes
 
 - [x] Document how to build this project for more advanced users
 - [x] Document how to use this container (config files, etc)
 - [x] Build a docker compose file as an example
 - [x] Build a gitlab action. Gitlab will be the main focus for this project
 - [x] Build a github action. Github will be the secondary focus for this.
-- [ ] Get the other shitcoin stuff working (Litecoin)
+- [ ] Extremely low priority. Get the other shitcoin stuff working (Litecoin)

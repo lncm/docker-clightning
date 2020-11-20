@@ -39,19 +39,20 @@ ARG VERSION
 ARG REPO
 
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates autoconf automake build-essential git libtool python3 python3-mako wget gnupg dirmngr git gettext libgmp-dev libsqlite3-dev net-tools zlib1g-dev unzip tclsh git
+ARG DEVELOPER=0
 
 WORKDIR /opt
-RUN git clone $REPO
-WORKDIR /opt/lightning
-RUN ls -la
-RUN mkdir -p /tmp/lightning_install
-
-RUN git checkout $VERSION
-#RUN git clone --recursive /tmp/lightning . && \
-#    git checkout $(git --work-tree=/tmp/lightning --git-dir=/tmp/lightning/.git rev-parse HEAD)
-
-ARG DEVELOPER=0
-RUN ./configure --prefix=/tmp/lightning_install --enable-static && make -j3 DEVELOPER=${DEVELOPER} && make install
+RUN git clone $REPO && \
+    cd lightning && \
+    ls -la && \
+    mkdir -p /tmp/lightning_install && \
+    ls -la /tmp && \
+    git checkout $VERSION && \
+    ./configure --prefix=/tmp/lightning_install \
+        --enable-static && \
+    make -j3 DEVELOPER=${DEVELOPER} && \
+    make install && \
+    ls -la  /tmp/lightning_install
 
 FROM debian:buster-slim as final
 ARG USER
@@ -59,21 +60,33 @@ ARG DATA
 
 LABEL maintainer="nolim1t (hello@nolim1t.co)"
 
-RUN apt-get update && apt-get install -y --no-install-recommends socat inotify-tools python3 python3-pip \
+RUN apt-get update && apt-get install -y --no-install-recommends git socat inotify-tools python3 python3-pip cargo \
     && rm -rf /var/lib/apt/lists/*
 
 
 COPY --from=builder /lib /lib
 COPY --from=builder /tmp/lightning_install/ /usr/local/
 COPY --from=downloader /opt/bin /usr/bin
-COPY --from=builder /opt/lightning/tools/docker-entrypoint.sh entrypoint.sh
+COPY ./scripts/docker-entrypoint.sh entrypoint.sh
+
+RUN mkdir /rust-plugin && \
+    chown 1000.1000 /rust-plugin
 
 RUN adduser --disabled-password \
     --home "$DATA" \
     --gecos "" \
     "$USER"
-
 USER $USER 
+
+# Build and install http rust plugin to the following dir
+# /rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin
+RUN cd /rust-plugin && \
+    git clone https://github.com/Start9Labs/c-lightning-http-plugin.git && \
+    cd c-lightning-http-plugin && \
+    cargo build --release && \
+    ls -la target/release/c-lightning-http-plugin && \
+    pwd
+
 
 ENV LIGHTNINGD_DATA=$DATA/.lightning
 ENV LIGHTNINGD_RPC_PORT=9835
