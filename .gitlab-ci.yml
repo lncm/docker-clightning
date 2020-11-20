@@ -115,11 +115,10 @@ build:buildx-tags-or-branch:
               echo "Not building by tag as CI_COMMIT_TAG is empty"
             fi
             if [ ! -z $CI_COMMIT_BRANCH ]; then
-              echo "Building $CI_COMMIT_BRANCH (branch mode)"
+              echo "Building $CI_COMMIT_BRANCH (branch mode - pick latest version, don't use VERSION=)"
               echo "Repo to push to $CI_APPLICATION_REPOSITORY:$CI_COMMIT_SHORT_SHA"
               docker buildx build \
                 --platform $CI_BUILDX_ARCHS \
-                --build-arg VERSION=$CI_COMMIT_SHORT_SHA \
                 --progress plain --pull \
                 -t "$CI_APPLICATION_REPOSITORY:$CI_COMMIT_SHORT_SHA" --push \
                 .
