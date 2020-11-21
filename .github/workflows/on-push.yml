@@ -60,7 +60,7 @@ jobs:
                                   --tag ${{ secrets.DOCKER_HUB_USER }}/clightning:latest \
                                   --output "type=registry" .
 
-                        - name: Push to GHCR.io too (ghcr.io/lncm/clightning)
+                        - name: Push to GHCR.io too (ghcr.io/lncm/docker-clightning)
                           run: |
                                   if [[ ! -z ${{ secrets.MAINTAINER_TOKEN }} ]] && [[ ! -z ${{ secrets.MAINTAINER_USER }} ]]; then
                                       echo "${{ secrets.MAINTAINER_TOKEN }}" | docker login https://ghcr.io -u "${{ secrets.MAINTAINER_USER }}" --password-stdin
