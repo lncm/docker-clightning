@@ -68,12 +68,14 @@ jobs:
                           run: |
                                   if [[ ! -z ${{ secrets.MAINTAINER_TOKEN }} ]] && [[ ! -z ${{ secrets.MAINTAINER_USER }} ]]; then
                                       echo "${{ secrets.MAINTAINER_TOKEN }}" | docker login https://ghcr.io -u "${{ secrets.MAINTAINER_USER }}" --password-stdin
+                                      echo "Pushing to ghcr.io/lncm/clightning/$TAG ..."
                                       docker buildx build \
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
                                         --platform linux/amd64,linux/arm64 \
                                         --tag ghcr.io/lncm/clightning:$TAG \
                                         --output "type=registry" .
+                                      echo "Pushing to ghcr.io/lncm/clightning:latest ..."
                                       docker buildx build \
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
