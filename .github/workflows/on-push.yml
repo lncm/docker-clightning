@@ -68,13 +68,13 @@ jobs:
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
                                         --platform linux/amd64,linux/arm64 \
-                                        --tag ghcr.io/${{ secrets.DOCKER_HUB_USER }}/$DOCKER_HUB_REPO:master-$SHORTSHA \
+                                        --tag ghcr.io/lncm/clightning:master-$(git rev-parse --short HEAD) \
                                         --output "type=registry" .
                                       docker buildx build \
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
                                         --platform linux/amd64,linux/arm64 \
-                                        --tag ghcr.io/${{ secrets.DOCKER_HUB_USER }}/$DOCKER_HUB_REPO:latest \
+                                        --tag ghcr.io/lncm/clightning:latest \
                                         --output "type=registry" .
                                   else
                                       echo "MAINTAINER_TOKEN and MAINTAINER_USER do no exist! Skipping!"
