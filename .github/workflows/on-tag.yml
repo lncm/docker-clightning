@@ -64,23 +64,23 @@ jobs:
                                   --tag ${{ secrets.DOCKER_HUB_USER }}/clightning:latest \
                                   --output "type=registry" .
 
-                        - name: Push to GHCR.io too (ghcr.io/lncm/clightning:TAG)
+                        - name: Push to GHCR.io too (ghcr.io/lncm/docker-clightning:TAG)
                           run: |
                                   if [[ ! -z ${{ secrets.MAINTAINER_TOKEN }} ]] && [[ ! -z ${{ secrets.MAINTAINER_USER }} ]]; then
                                       echo "${{ secrets.MAINTAINER_TOKEN }}" | docker login https://ghcr.io -u "${{ secrets.MAINTAINER_USER }}" --password-stdin
-                                      echo "Pushing to ghcr.io/lncm/clightning/$TAG ..."
+                                      echo "Pushing to ghcr.io/lncm/docker-clightning/$TAG ..."
                                       docker buildx build \
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
                                         --platform linux/amd64,linux/arm64 \
-                                        --tag ghcr.io/lncm/clightning:$TAG \
+                                        --tag ghcr.io/lncm/docker-clightning:$TAG \
                                         --output "type=registry" .
-                                      echo "Pushing to ghcr.io/lncm/clightning:latest ..."
+                                      echo "Pushing to ghcr.io/lncm/docker-clightning:latest ..."
                                       docker buildx build \
                                         --cache-from "type=local,src=/tmp/.buildx-cache" \
                                         --cache-to "type=local,dest=/tmp/.buildx-cache" \
                                         --platform linux/amd64,linux/arm64 \
-                                        --tag ghcr.io/lncm/clightning:latest \
+                                        --tag ghcr.io/lncm/docker-clightning:latest \
                                         --output "type=registry" .
                                   else
                                       echo "MAINTAINER_TOKEN and MAINTAINER_USER do no exist! Skipping!"
