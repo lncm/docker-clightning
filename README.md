@@ -41,7 +41,7 @@ For example specifying a version to build.
 ```bash
 docker build \
     --build-arg VERSION=v0.9.1 \
-    -t lncm/clightning:v0.9.1 .
+    -t nolim1t/clightning:v0.9.1 .
 ```
 The other configurables you can use are:
 
@@ -65,6 +65,15 @@ docker run -it --rm \
     -v $HOME/.lightning:/data/.lightning \
     -v $HOME/.bitcoin:/data/.bitcoin \
     lncm/clightning:v0.9.1
+
+# or if using gitlab
+docker run -it --rm \
+    --name clightning \
+    -e LIGHTNINGD_NETWORK=bitcoin \
+    -e LIGHTNINGD_RPC_PORT=10420 \
+    -v $HOME/.lightning:/data/.lightning \
+    -v $HOME/.bitcoin:/data/.bitcoin \
+    registry.gitlab.com/nolim1t/docker-clightning:v0.9.1-ef50a1f7
 ```
 
 ## Using the RPC Interface
