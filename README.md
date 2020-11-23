@@ -40,8 +40,8 @@ For example specifying a version to build.
 
 ```bash
 docker build \
-    --build-arg VERSION=v0.9.1 \
-    -t nolim1t/clightning:v0.9.1 .
+    --build-arg VERSION=v0.9.2 \
+    -t nolim1t/clightning:v0.9.2 .
 ```
 The other configurables you can use are:
 
@@ -64,7 +64,7 @@ docker run -it --rm \
     -e LIGHTNINGD_RPC_PORT=10420 \
     -v $HOME/.lightning:/data/.lightning \
     -v $HOME/.bitcoin:/data/.bitcoin \
-    lncm/clightning:v0.9.1
+    lncm/clightning:v0.9.2
 
 # or if using gitlab
 docker run -it --rm \
