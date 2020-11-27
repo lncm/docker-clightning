@@ -51,4 +51,10 @@ the details for your feature as well as whatever reason/justification for it.
 
 It will be read and probably not ignored.
 
+### Donations
+
+Monetary donations is another way of receiving support for maintaining. Most of us Open Source developers are completely independent and without sponsors, while we build the internet and further development in this space.
+
+The following [page](https://nolim1t.co/tips/) lets you donate via Lightning / on-chain bitcoin or DAI. This will 100% go to a HODL address for now.
+
 
