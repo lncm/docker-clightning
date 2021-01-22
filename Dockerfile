@@ -1,5 +1,5 @@
 ARG REPO=https://github.com/ElementsProject/lightning.git
-ARG VERSION=v0.9.1
+ARG VERSION=v0.9.3
 ARG USER=lightning
 ARG DATA=/data
 
@@ -38,11 +38,15 @@ FROM debian:buster-slim as builder
 ARG VERSION
 ARG REPO
 
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates autoconf automake build-essential git libtool python3 python3-mako wget gnupg dirmngr git gettext libgmp-dev libsqlite3-dev net-tools zlib1g-dev unzip tclsh git
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates autoconf \
+    automake build-essential git libtool python python3 python3-mako \
+    wget gnupg dirmngr git gettext libgmp-dev libsqlite3-dev net-tools \
+    zlib1g-dev unzip tclsh git libsodium-dev libpq-dev valgrind python3-pip
 ARG DEVELOPER=0
 
 WORKDIR /opt
-RUN git clone $REPO && \
+RUN git clone --recurse-submodules $REPO && \
     cd lightning && \
     ls -la && \
     mkdir -p /tmp/lightning_install && \
