@@ -73,7 +73,7 @@ docker run -it --rm \
     -e LIGHTNINGD_RPC_PORT=10420 \
     -v $HOME/.lightning:/data/.lightning \
     -v $HOME/.bitcoin:/data/.bitcoin \
-    registry.gitlab.com/nolim1t/docker-clightning:v0.9.3-45303c26
+    registry.gitlab.com/nolim1t/docker-clightning:v0.9.3-a5f53123
 ```
 
 ## Using the RPC Interface
