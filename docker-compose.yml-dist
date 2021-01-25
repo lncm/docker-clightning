@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     clightning:
-        image: lncm/clightning:v0.9.3@sha256:793b2784178dab1093bd7601b5d9d45e902343aaee3f85dc38bdf8e472ddd22c
+        image: lncm/clightning:v0.9.3@sha256:b213b696a33da599df51c3cad789e3ad3b0418395b6bc8f00f25c615a3b6630e
         container_name: clightning
         network_mode: host
         restart: on-failure

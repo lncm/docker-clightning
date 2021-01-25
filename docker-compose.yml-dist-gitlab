@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     clightning:
-        image: registry.gitlab.com/nolim1t/docker-clightning:v0.9.3-45303c26@sha256:e55c16552fc7a1f482dc2c3103546c7ecde8871b40930aec1d04f258c221d717
+        image: registry.gitlab.com/nolim1t/docker-clightning:v0.9.3-a5f53123@sha256:b5bdce3d65c7fd33fdc9d938fd2b89aa2027e6a2c23b253b9601a17440460672
         container_name: clightning
         network_mode: host
         restart: on-failure
