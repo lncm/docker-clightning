@@ -10,8 +10,6 @@
 
 [C-Lightning](https://github.com/ElementsProject/lightning) by [Elements Project](https://github.com/ElementsProject/) in a [docker container](https://gitlab.com/nolim1t/docker-clightning) for easy orchestration on embedded devices (like the Raspberry Pi), and auto-building.
 
-Also to enable [FullyNoded](https://github.com/Fonta1n3/FullyNoded/) (currently, and maybe other stuff in future) to work properly, I've also bundled in the [http rpc plugin](https://github.com/Start9Labs/c-lightning-http-plugin) by [Start9Labs](https://github.com/Start9Labs).
-
 ## Why?
 
 To do cross-platform builds the [LNCM](https://github.com/lncm/) way, like some of my other containers
