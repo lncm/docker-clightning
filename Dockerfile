@@ -61,7 +61,7 @@ RUN git clone --recurse-submodules $REPO && \
     ./configure --prefix=/tmp/lightning_install \
         --enable-static && \
     echo "Building" && \
-    make -j3 DEVELOPER=${DEVELOPER} && \
+    make && \
     echo "installing" && \
     make install && \
     ls -la  /tmp/lightning_install
