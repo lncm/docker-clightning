@@ -1,4 +1,4 @@
-BITCOIN_VERSION="0.20.1"
+BITCOIN_VERSION="22.0"
 BITCOIN_TARBALL="bitcoin-${BITCOIN_VERSION}-${aarch64:-`uname -m`}-linux-gnu.tar.gz"
 BITCOIN_URL="https://bitcoincore.org/bin/bitcoin-core-$BITCOIN_VERSION/$BITCOIN_TARBALL"
 
