@@ -76,25 +76,6 @@ docker run -it --rm \
     registry.gitlab.com/nolim1t/docker-clightning:v0.9.3-a5f53123
 ```
 
-## Using the RPC Interface
-
-You will need to add the following to your config file:
-
-* `http-user`
-* `http-pass`
-* `http-bind` (hostname and port)
-
-Then you can pass whatever RPC commands to your C Lightning node!
-
-Example:
-
-```bash
-curl "http://lightning:lightningpass@localhost:1312" \
-    -d '{"id": "rpctest", "method": "getinfo", "params": []}'
-```
-
-Please keep in mind the RPC is probably not fully hardened for public internet access. You may want to put this behind a https proxy or TOR node!
-
 ## Todo
 
 Most stuff is in the [issues list](https://gitlab.com/nolim1t/docker-clightning/-/issues) however the below is kept for legacy purposes

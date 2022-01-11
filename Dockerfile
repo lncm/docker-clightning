@@ -83,16 +83,6 @@ RUN adduser --disabled-password \
     "$USER"
 USER $USER 
 
-# Build and install http rust plugin to the following dir
-# /rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin
-RUN cd /rust-plugin && \
-    git clone https://github.com/Start9Labs/c-lightning-http-plugin.git && \
-    cd c-lightning-http-plugin && \
-    cargo build --release && \
-    ls -la target/release/c-lightning-http-plugin && \
-    pwd
-
-
 ENV LIGHTNINGD_DATA=$DATA/.lightning
 ENV LIGHTNINGD_RPC_PORT=9835
 ENV LIGHTNINGD_PORT=9735
