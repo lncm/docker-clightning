@@ -45,7 +45,8 @@ RUN apt-get update && \
     zlib1g-dev unzip tclsh git libsodium-dev libpq-dev valgrind python3-pip \
     valgrind libpq-dev shellcheck cppcheck \
     libsecp256k1-dev jq \
-    python3-setuptools
+    python3-setuptools \
+    python3-dev
 RUN pip3 install mrkd wheel mistune==0.8.4
 
 ARG DEVELOPER=0
@@ -61,7 +62,7 @@ RUN git clone --recurse-submodules $REPO && \
     ./configure --prefix=/tmp/lightning_install \
         --enable-static && \
     echo "Building" && \
-    make && \
+    make -j3 DEVELOPER=${DEVELOPER} && \
     echo "installing" && \
     make install && \
     ls -la  /tmp/lightning_install
