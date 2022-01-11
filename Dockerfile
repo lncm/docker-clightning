@@ -42,7 +42,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates autoconf \
     automake build-essential git libtool python python3 python3-mako \
     wget gnupg dirmngr git gettext libgmp-dev libsqlite3-dev net-tools \
-    zlib1g-dev unzip tclsh git libsodium-dev libpq-dev valgrind python3-pip
+    zlib1g-dev unzip tclsh git libsodium-dev libpq-dev valgrind python3-pip \
+    valgrind libpq-dev shellcheck cppcheck \
+    libsecp256k1-dev jq \
+    python3-setuptools
+RUN pip3 install mrkd mistune==0.8.4
+
 ARG DEVELOPER=0
 
 WORKDIR /opt
@@ -52,9 +57,12 @@ RUN git clone --recurse-submodules $REPO && \
     mkdir -p /tmp/lightning_install && \
     ls -la /tmp && \
     git checkout $VERSION && \
+    echo "Configuring" && \
     ./configure --prefix=/tmp/lightning_install \
         --enable-static && \
+    echo "Building" && \
     make -j3 DEVELOPER=${DEVELOPER} && \
+    echo "installing" && \
     make install && \
     ls -la  /tmp/lightning_install
 
@@ -76,6 +84,21 @@ COPY ./scripts/docker-entrypoint.sh entrypoint.sh
 
 RUN mkdir /rust-plugin && \
     chown 1000.1000 /rust-plugin
+
+# Build and install http rust plugin to the following dir
+# /rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin
+#RUN echo "Installing start9labs rust http plugin" && \
+#    cd /rust-plugin && \
+#    echo "Checkout plugin" && \
+#    git clone https://github.com/Start9Labs/c-lightning-http-plugin.git && \
+#    echo "Installing plugin" && \
+#    cd c-lightning-http-plugin && \
+#    cargo build --release && \
+#    echo "verify plugin" && \
+#    ls -la target/release/c-lightning-http-plugin && \
+#    pwd
+
+
 
 RUN adduser --disabled-password \
     --home "$DATA" \
