@@ -46,7 +46,7 @@ RUN apt-get update && \
     valgrind libpq-dev shellcheck cppcheck \
     libsecp256k1-dev jq \
     python3-setuptools
-RUN pip3 install mrkd mistune==0.8.4
+RUN pip3 install mrkd wheel mistune==0.8.4
 
 ARG DEVELOPER=0
 
