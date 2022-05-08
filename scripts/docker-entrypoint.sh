@@ -7,11 +7,11 @@
 : "${EXPOSE_TCP:=false}"
 
 networkdatadir="${LIGHTNINGD_DATA}/${LIGHTNINGD_NETWORK}"
-HTTP_RPC_PLUGIN_PATH="/rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin"
+#HTTP_RPC_PLUGIN_PATH="/rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin"
 
 if [ "$EXPOSE_TCP" == "true" ]; then
     set -m
-    lightningd --plugin="${HTTP_RPC_PLUGIN_PATH}" "$@" &
+    lightningd "$@" &
 
     echo "C-Lightning starting"
     while read -r i; do if [ "$i" = "lightning-rpc" ]; then break; fi; done \
@@ -22,5 +22,5 @@ if [ "$EXPOSE_TCP" == "true" ]; then
     socat "TCP4-listen:$LIGHTNINGD_RPC_PORT,fork,reuseaddr" "UNIX-CONNECT:${networkdatadir}/lightning-rpc" &
     fg %-
 else
-    exec lightningd --network="${LIGHTNINGD_NETWORK}" --plugin="${HTTP_RPC_PLUGIN_PATH}" "$@"
+    exec lightningd --network="${LIGHTNINGD_NETWORK}" "$@"
 fi
