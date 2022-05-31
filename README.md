@@ -1,4 +1,4 @@
-# C-Lightning in a Docker container
+# Core Lightning in a Docker container
 
 [![pipeline status](https://gitlab.com/nolim1t/docker-clightning/badges/master/pipeline.svg)](https://gitlab.com/lncm/docker-clightning/-/commits/master)
 [![Build on tag](https://github.com/lncm/docker-clightning/workflows/Docker%20build%20on%20tag/badge.svg)](https://github.com/lncm/docker-clightning/actions?query=workflow%3A%22Docker+build+on+tag%22)
@@ -8,7 +8,7 @@
 
 ## What
 
-[C-Lightning](https://github.com/ElementsProject/lightning) by [Elements Project](https://github.com/ElementsProject/) in a [docker container](https://gitlab.com/nolim1t/docker-clightning) for easy orchestration on embedded devices (like the Raspberry Pi), and auto-building.
+[Core Lightning](https://github.com/ElementsProject/lightning) by [Elements Project](https://github.com/ElementsProject/) in a [docker container](https://gitlab.com/nolim1t/docker-clightning) for easy orchestration on embedded devices (like the Raspberry Pi), and auto-building.
 
 ## Why?
 
