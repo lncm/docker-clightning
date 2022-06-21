@@ -1,16 +1,16 @@
 ARG REPO=https://github.com/ElementsProject/lightning.git
-ARG VERSION=v0.10.2
+ARG VERSION=v0.11.1
 ARG USER=lightning
 ARG DATA=/data
 
-FROM debian:buster-slim as downloader
+FROM debian:bullseye as downloader
 
 ARG REPO
 ARG VERSION
 
 RUN set -ex \
-	&& apt-get update \
-	&& apt-get install -qq --no-install-recommends ca-certificates dirmngr wget
+	&& apt update \
+	&& apt install -y -qq --no-install-recommends ca-certificates dirmngr wget
 
 WORKDIR /opt
 
@@ -19,103 +19,113 @@ COPY ./fetch-scripts/fetch-bitcoin.sh .
 RUN chmod 755 fetch-bitcoin.sh
 RUN ./fetch-bitcoin.sh
 
-#ENV LITECOIN_VERSION 0.16.3
-#ENV LITECOIN_PGP_KEY FE3348877809386C
-#ENV LITECOIN_URL https://download.litecoin.org/litecoin-${LITECOIN_VERSION}/linux/litecoin-${LITECOIN_VERSION}-x86_64-linux-gnu.tar.gz
-#ENV LITECOIN_ASC_URL https://download.litecoin.org/litecoin-${LITECOIN_VERSION}/linux/litecoin-${LITECOIN_VERSION}-linux-signatures.asc
-#ENV LITECOIN_SHA256 686d99d1746528648c2c54a1363d046436fd172beadaceea80bdc93043805994
-
-# install litecoin binaries
-#RUN mkdir /opt/litecoin && cd /opt/litecoin \
-#    && wget -qO litecoin.tar.gz "$LITECOIN_URL" \
-#    && echo "$LITECOIN_SHA256  litecoin.tar.gz" | sha256sum -c - \
-#    && BD=litecoin-$LITECOIN_VERSION/bin \
-#    && tar -xzvf litecoin.tar.gz $BD/litecoin-cli --strip-components=1 --exclude=*-qt \
-#    && rm litecoin.tar.gz
-
-FROM debian:buster-slim as builder
+FROM rust:1.60-bullseye as builder
 
 ARG VERSION
 ARG REPO
+RUN apt update && \
+    apt install -qq -y --no-install-recommends \
+        autoconf \
+        automake \
+        build-essential \
+        ca-certificates \
+        curl \
+        dirmngr \
+        gettext \
+        git \
+        gnupg \
+        libpq-dev \
+        zlib1g-dev \
+        libsodium-dev \
+        libsqlite3-dev \
+        libgmp-dev \
+        libtool \
+        libffi-dev \
+        python3 \
+        python3-dev \
+        python3-mako \
+        python3-pip \
+        python3-venv \
+        wget
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates autoconf \
-    automake build-essential git libtool python python3 python3-mako \
-    wget gnupg dirmngr git gettext libgmp-dev libsqlite3-dev net-tools \
-    zlib1g-dev unzip tclsh git libsodium-dev libpq-dev valgrind python3-pip \
-    valgrind libpq-dev shellcheck cppcheck \
-    libsecp256k1-dev jq \
-    python3-setuptools \
-    python3-dev
-RUN pip3 install mrkd wheel mistune==0.8.4
+
+WORKDIR /opt/lightningd
+COPY . /tmp/lightning
+RUN git clone --recursive $REPO . && \
+    git checkout $VERSION
 
 ARG DEVELOPER=0
+ENV PYTHON_VERSION=3
 
-WORKDIR /opt
-RUN git clone --recurse-submodules $REPO && \
-    cd lightning && \
-    ls -la && \
-    mkdir -p /tmp/lightning_install && \
-    ls -la /tmp && \
-    git checkout $VERSION && \
-    echo "Configuring" && \
-    ./configure --prefix=/tmp/lightning_install \
-        --enable-static && \
-    echo "Building" && \
-    make -j3 DEVELOPER=${DEVELOPER} && \
-    echo "installing" && \
-    make install && \
-    ls -la  /tmp/lightning_install
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 - \
+    && pip3 install -U pip \
+    && pip3 install -U wheel \
+    && /root/.local/bin/poetry config virtualenvs.create false \
+    && /root/.local/bin/poetry install
 
-FROM debian:buster-slim as final
+RUN rustup component add rustfmt
+
+RUN ./configure --prefix=/tmp/lightning_install --enable-static --enable-rust 
+RUN make -j$(nproc) DEVELOPER=${DEVELOPER}
+RUN make install
+
+FROM node:18-bullseye as node-builder
+
+WORKDIR /rest-plugin
+
+RUN git clone https://github.com/Ride-the-Lightning/c-lightning-REST.git . && \
+    yarn
+
+WORKDIR /sparko-plugin
+RUN git clone --recursive https://github.com/fiatjaf/sparko.git . && \
+    make spark-wallet/client/dist/app.js
+
+FROM golang:1.17 as go-builder
+
+RUN go get github.com/mitchellh/gox
+
+WORKDIR /graphql-plugin
+RUN git clone https://github.com/nettijoe96/c-lightning-graphql.git . && \
+    go build -o c-lightning-graphql
+
+COPY --from=node-builder /sparko-plugin /sparko-plugin
+WORKDIR /sparko-plugin
+RUN PATH=${HOME}/go/bin:$PATH make dist
+
+
+FROM node:18-bullseye-slim as final
+
+RUN apt update && apt install -y --no-install-recommends inotify-tools libpq5 libsodium23 openssl \
+    && rm -rf /var/lib/apt/lists/*
+
 ARG USER
 ARG DATA
-
-LABEL maintainer="nolim1t (hello@nolim1t.co)"
-
-RUN apt-get update && apt-get install -y --no-install-recommends git socat inotify-tools python3 python3-pip cargo \
-    libpq-dev libsodium-dev nodejs npm \
-    && rm -rf /var/lib/apt/lists/*
 
 
 COPY --from=builder /lib /lib
 COPY --from=builder /tmp/lightning_install/ /usr/local/
+COPY --from=node-builder /rest-plugin /rest-plugin
+COPY --from=go-builder /graphql-plugin/c-lightning-graphql /graphql-plugin
+COPY --from=go-builder /sparko-plugin/dist /sparko-plugin
 COPY --from=downloader /opt/bin /usr/bin
 COPY ./scripts/docker-entrypoint.sh entrypoint.sh
 
-RUN mkdir /rust-plugin && \
-    chown 1000.1000 /rust-plugin
-
-# Build and install http rust plugin to the following dir
-# /rust-plugin/c-lightning-http-plugin/target/release/c-lightning-http-plugin
-#RUN echo "Installing start9labs rust http plugin" && \
-#    cd /rust-plugin && \
-#    echo "Checkout plugin" && \
-#    git clone https://github.com/Start9Labs/c-lightning-http-plugin.git && \
-#    echo "Installing plugin" && \
-#    cd c-lightning-http-plugin && \
-#    cargo build --release && \
-#    echo "verify plugin" && \
-#    ls -la target/release/c-lightning-http-plugin && \
-#    pwd
-
-
+RUN userdel -r node
 
 RUN adduser --disabled-password \
     --home "$DATA" \
     --gecos "" \
     "$USER"
-USER $USER 
+
+
+RUN chown -R $USER /sparko-plugin
+
+USER $USER
 
 ENV LIGHTNINGD_DATA=$DATA/.lightning
 ENV LIGHTNINGD_RPC_PORT=9835
 ENV LIGHTNINGD_PORT=9735
 ENV LIGHTNINGD_NETWORK=bitcoin
-
-# Setup home directory
-#RUN mkdir $LIGHTNINGD_DATA && \
-#    touch $LIGHTNINGD_DATA/config
-#VOLUME [ "/data/.lightning" ]
 
 EXPOSE 9735 9736 9835 9836 19735 19736 19835 19836
 
