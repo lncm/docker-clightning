@@ -1,5 +1,5 @@
 ARG REPO=https://github.com/ElementsProject/lightning.git
-ARG VERSION=v0.10.2
+ARG VERSION=v22.11.1
 ARG USER=lightning
 ARG DATA=/data
 
